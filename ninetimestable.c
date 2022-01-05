@@ -122,7 +122,7 @@ int InputCheck01()
 
 /*----------------------------------------------------------------------------------------------
  * Function     : InputCheck02
- * Description  : 사용자 입력값을 숫자, 콤마(,), 물결(~)로 구분하여 계산 함수로 전달.
+ * Description  : 사용자 입력값을 숫자, 콤마(,), 물결(~)로 구분하여 Calculate 함수로 전달.
  *----------------------------------------------------------------------------------------------*/
 int InputCheck02()
 {
@@ -159,7 +159,7 @@ int InputCheck02()
                         n2++;
                     }
                 }
-                i++;
+                i+=2;
             }
             else
             {
@@ -224,13 +224,6 @@ void Calculate(int n)
             {
                 timesarr[i][j] = n * ((i % 9) + 1);
             }
-            /*--------------------------------------------
-            * 구분선 채우기
-            *--------------------------------------------*/
-            else if (j == 6 || j == 14 || j == 22)
-            {
-                timesarr[i][j] = '|';
-            }
             else
             {
                 timesarr[i][j] = ' ';
@@ -264,14 +257,21 @@ int PrintTimesTable()
         {
             if (j == 4 || j == 12 || j == 20)
             {
-                printf("%3d", timesarr[i][j]);
+                if (timesarr[i][j] != 0)
+                {
+                    printf("%3d", timesarr[i][j]);
+                }
+                else
+                {
+                    printf("%3c", timesarr[i][j]);
+                }
             }
             else
             {
                 printf("%3c", timesarr[i][j]);
             }
 
-            if (timesarr[i][j] == 0x00 && timesarr[i][j+4] == 0x00)
+            if ((i+1)%9 == 0 && timesarr[i][j] == 0x00 && timesarr[i][j+4] == 0x00)
             {
                 return 0;
             }
