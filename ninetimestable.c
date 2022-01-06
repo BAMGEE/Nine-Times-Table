@@ -16,41 +16,64 @@
 
 
 /*--<VARIABLES>---------------------------------------------------------------------------------*/
-char    inputarr        [100];                      /* 입력값 배열 */
-char    timesarr        [100][24];                  /* 구구단 배열 */
-int     posX            = 0;
-int     posY            = 0;
-int     len             = 0;
+char    inputarr[100];                      /* 입력값 배열 */
+char    timesarr[100][24];                  /* 구구단 배열 */
+int     posX = 0;
+int     posY = 0;
 
 
 /*--<FUNCTION PROTOTYPE>------------------------------------------------------------------------*/
-void    Description     ();
-int     InputCheck01    ();
-int     InputCheck02    ();
-void    Calculate       (int n);
-int     PrintTimesTable ();
+void    Description();
+int     InputCheck01();
+int     InputCheck02();
+void    Calculate(int n);
+int     PrintTimesTable();
 
 
 /*----------------------------------------------------------------------------------------------
  * Function     : main
  * Description  : 구구단 출력 프로그램의 main 함수
- * Input param  : 
- * Output param :
- * Return value : 
  *----------------------------------------------------------------------------------------------*/
 int main()
 {
     int checknum = 0;
+    int yn = 0;
 
-    Description();
-    checknum = InputCheck01(); /* 0: OK , 1: ERR */
-
-    if (checknum == 0)
+    while (yn != 2)
     {
-        InputCheck02();
-        PrintTimesTable();
+        Description();
+        checknum = InputCheck01(); /* 0: OK , 1: ERR */
+
+        if (checknum == 0)
+        {
+            InputCheck02();
+            PrintTimesTable();
+        }
+        printf("\n\n1. 다시 입력\n2. 프로그램 종료\n\n입 력 : ");
+        scanf("%d", &yn);
+
+        if (yn != 2)
+        {
+            system("cls");
+
+            /*--------------------------------------------
+            * 배열 및 변수 초기화
+            *--------------------------------------------*/
+            for (int i = 0; i < 100; i++)
+            {
+                inputarr[i] = 0;
+
+                for (int j = 0; j < 24; j++)
+                {
+                    timesarr[i][j] = 0;
+                }
+            }
+            posX = 0;
+            posY = 0;
+        }
+
     }
-    
+
     printf("\n\n프로그램 종료.\n");
     return 0;
 } /* End of main */
@@ -102,7 +125,7 @@ int InputCheck01()
             {
                 printf("ERR : 2단부터 9단까지 출력이 가능합니다.\n");
                 return 1;
-            }            
+            }
         }
         /*--------------------------------------------
         * 입력값 중 문자가 반복될 때
@@ -113,7 +136,7 @@ int InputCheck01()
             {
                 printf("ERR : 문자는 한 개씩\n");
                 return 1;
-            }            
+            }
         }
     }
     return 0;
@@ -129,7 +152,7 @@ int InputCheck02()
     int n1 = 0;
     int n2 = 0;
 
-    len = strlen(inputarr);
+    int len = strlen(inputarr);
 
     for (int i = 0; i < len; i++)
     {
@@ -138,10 +161,15 @@ int InputCheck02()
             /*--------------------------------------------
             * 숫자 다음 물결(~)이 있을 때
             *--------------------------------------------*/
-            if (inputarr[i+1] == 0x7e)
+            if (inputarr[i + 1] == 0x7e)
             {
                 n1 = atoi(&inputarr[i]);
                 n2 = atoi(&inputarr[i + 2]);
+
+                if (inputarr[i + 2] == 0)
+                {
+                    n2 = 9;
+                }
 
                 if (n2 > n1)
                 {
@@ -159,7 +187,7 @@ int InputCheck02()
                         n2++;
                     }
                 }
-                i+=2;
+                i += 2;
             }
             else
             {
@@ -170,7 +198,7 @@ int InputCheck02()
         /*--------------------------------------------
         * 공백이 연속되면 끝냄
         *--------------------------------------------*/
-        else if (inputarr[i] == 0x00 && inputarr[i+1] == 0x00)
+        else if (inputarr[i] == 0x00 && inputarr[i + 1] == 0x00)
         {
             return 0;
         }
@@ -271,17 +299,20 @@ int PrintTimesTable()
                 printf("%3c", timesarr[i][j]);
             }
 
-            if ((i+1)%9 == 0 && timesarr[i][j] == 0x00 && timesarr[i][j+4] == 0x00)
+            if (j == 23 && (i + 1) % 9 == 0)
             {
-                return 0;
-            }
-            else if (j == 23 && (i + 1) % 9 == 0)
-            {
-                printf("\n");
+                if (timesarr[i + 1][0] == 0x00 && timesarr[i + 2][0] == 0x00)
+                {
+                    return 0;
+                }
+                else
+                {
+                    printf("\n");
+                }
             }
         }
         printf("\n");
-    }  
+    }
 
     return 0;
 } /* End of PrintTimesTable */
