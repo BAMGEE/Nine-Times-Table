@@ -1,6 +1,6 @@
 /***********************************************************************************************
  *  System          : Nine Times Table
- *  Program ID      : ninetimestable.c
+ *  Program ID      : nine.c
  *  Description     : 구구단 출력 프로그램
  *  Author          : Jiyeoning
  ************************************************************************************************/
@@ -11,15 +11,11 @@
 #include    <stdlib.h>
 
 
-/*--<DEFINE CONSTANTS>--------------------------------------------------------------------------*/
-
-
-
 /*--<VARIABLES>---------------------------------------------------------------------------------*/
-char    inputarr[100];                      /* 입력값 배열 */
-char    timesarr[100][24];                  /* 구구단 배열 */
-int     posX = 0;
-int     posY = 0;
+char    gsInputArr[100];                      /* 입력값 배열 */
+char    gsTimesArr[100][24];                  /* 구구단 배열 */
+int     giPosX = 0;
+int     giPosY = 0;
 
 
 /*--<FUNCTION PROTOTYPE>------------------------------------------------------------------------*/
@@ -36,45 +32,50 @@ int     PrintTimesTable();
  *----------------------------------------------------------------------------------------------*/
 int main()
 {
-    int checknum = 0;
-    int yn = 0;
+    int liCheckNum = 0;
+    int liAnswer = 0;
+    int i, j;
 
-    while (yn != 2)
+    system("clear");
+
+    while (liAnswer != 2)
     {
         Description();
-        checknum = InputCheck01(); /* 0: OK , 1: ERR */
+        liCheckNum = InputCheck01(); /* 0: OK , 1: ERR */
 
-        if (checknum == 0)
+        if (liCheckNum == 0)
         {
             InputCheck02();
             PrintTimesTable();
         }
         printf("\n\n1. 다시 입력\n2. 프로그램 종료\n\n입 력 : ");
-        scanf("%d", &yn);
+        scanf("%d", &liAnswer);
 
-        if (yn != 2)
+        if (liAnswer != 2)
         {
-            system("cls");
+            system("clear");
 
             /*--------------------------------------------
             * 배열 및 변수 초기화
             *--------------------------------------------*/
-            for (int i = 0; i < 100; i++)
+            for (i = 0; i < 100; i++)
             {
-                inputarr[i] = 0;
+                gsInputArr[i] = 0;
 
-                for (int j = 0; j < 24; j++)
+                for (j = 0; j < 24; j++)
                 {
-                    timesarr[i][j] = 0;
+                    gsTimesArr[i][j] = 0;
                 }
             }
-            posX = 0;
-            posY = 0;
+            giPosX = 0;
+            giPosY = 0;
         }
 
     }
 
     printf("\n\n프로그램 종료.\n");
+    system("clear");
+
     return 0;
 } /* End of main */
 
@@ -93,7 +94,7 @@ void Description()
     printf("* 물결(~)을 이용한 입력 (ex. 2~5)\n");
     printf("* 콤마(,)와 물결(~)을 이용한 입력 (ex. 2,4~6,9)\n");
     printf("\n\n입 력 : ");
-    scanf("%s", inputarr);
+    scanf("%s", gsInputArr);
 
 } /* End of Description */
 
@@ -101,17 +102,19 @@ void Description()
  * Function     : InputCheck01
  * Description  : 사용자 입력값이 유효한지 검사.
  *               콤마(,)와 물결(~)이 연속되거나 숫자가 연속되면 에러메시지 출력.
- * Input param  : char inputarr[100]
+ * Input param  : char gsInputArr[100]
  * Return value : 0(OK), 1(ERR)
  *----------------------------------------------------------------------------------------------*/
 int InputCheck01()
 {
-    for (int i = 0; i < 100; i++)
+    int i;
+
+    for (i = 0; i < 100; i++)
     {
         /*--------------------------------------------
         * 입력값 중 0 또는 1이 있을 때
         *--------------------------------------------*/
-        if (inputarr[i] == 0x30 || inputarr[i] == 0x31)
+        if (gsInputArr[i] == 0x30 || gsInputArr[i] == 0x31)
         {
             printf("ERR : 2단부터 9단까지 출력이 가능합니다.\n");
             return 1;
@@ -119,9 +122,9 @@ int InputCheck01()
         /*--------------------------------------------
         * 입력값 중 2부터 9 사이의 숫자가 연속될 때
         *--------------------------------------------*/
-        else if (inputarr[i] >= 0x32 && inputarr[i] <= 0x39)
+        else if (gsInputArr[i] >= 0x32 && gsInputArr[i] <= 0x39)
         {
-            if (inputarr[i + 1] >= 0x32 && inputarr[i + 1] <= 0x39)
+            if (gsInputArr[i + 1] >= 0x32 && gsInputArr[i + 1] <= 0x39)
             {
                 printf("ERR : 2단부터 9단까지 출력이 가능합니다.\n");
                 return 1;
@@ -130,9 +133,9 @@ int InputCheck01()
         /*--------------------------------------------
         * 입력값 중 문자가 반복될 때
         *--------------------------------------------*/
-        else if (inputarr[i] == 0x2c || inputarr[i] == 0x7e)
+        else if (gsInputArr[i] == 0x2c || gsInputArr[i] == 0x7e)
         {
-            if (inputarr[i + 1] == 0x2c || inputarr[i + 1] == 0x7e)
+            if (gsInputArr[i + 1] == 0x2c || gsInputArr[i + 1] == 0x7e)
             {
                 printf("ERR : 문자는 한 개씩\n");
                 return 1;
@@ -149,56 +152,57 @@ int InputCheck01()
  *----------------------------------------------------------------------------------------------*/
 int InputCheck02()
 {
-    int n1 = 0;
-    int n2 = 0;
+    int liNum01 = 0;
+    int liNum02 = 0;
+    int i;
 
-    int len = strlen(inputarr);
+    int liInputLen = strlen(gsInputArr);
 
-    for (int i = 0; i < len; i++)
+    for (i = 0; i < liInputLen; i++)
     {
-        if (inputarr[i] >= 0x32 && inputarr[i] <= 0x39)
+        if (gsInputArr[i] >= 0x32 && gsInputArr[i] <= 0x39)
         {
             /*--------------------------------------------
             * 숫자 다음 물결(~)이 있을 때
             *--------------------------------------------*/
-            if (inputarr[i + 1] == 0x7e)
+            if (gsInputArr[i + 1] == 0x7e)
             {
-                n1 = atoi(&inputarr[i]);
-                n2 = atoi(&inputarr[i + 2]);
+                liNum01 = atoi(&gsInputArr[i]);
+                liNum02 = atoi(&gsInputArr[i + 2]);
 
-                if (inputarr[i + 2] == 0)
+                if (gsInputArr[i + 2] == 0)
                 {
-                    n2 = 9;
+                    liNum02 = 9;
                 }
 
-                if (n2 > n1)
+                if (liNum02 > liNum01)
                 {
-                    while (n1 <= n2)
+                    while (liNum01 <= liNum02)
                     {
-                        Calculate(n1);
-                        n1++;
+                        Calculate(liNum01);
+                        liNum01++;
                     }
                 }
                 else
                 {
-                    while (n2 <= n1)
+                    while (liNum02 <= liNum01)
                     {
-                        Calculate(n2);
-                        n2++;
+                        Calculate(liNum02);
+                        liNum02++;
                     }
                 }
                 i += 2;
             }
             else
             {
-                n1 = atoi(&inputarr[i]);
-                Calculate(n1);
+                liNum01 = atoi(&gsInputArr[i]);
+                Calculate(liNum01);
             }
         }
         /*--------------------------------------------
         * 공백이 연속되면 끝냄
         *--------------------------------------------*/
-        else if (inputarr[i] == 0x00 && inputarr[i + 1] == 0x00)
+        else if (gsInputArr[i] == 0x00 && gsInputArr[i + 1] == 0x00)
         {
             return 0;
         }
@@ -208,100 +212,104 @@ int InputCheck02()
 
 /*----------------------------------------------------------------------------------------------
  * Function     : Calculate
- * Description  : 전달받은 인자를 계산해 timesarr 배열에 대입.
+ * Description  : 전달받은 인자를 계산해 gsTimesArr 배열에 대입.
  * Input param  : int i
  *----------------------------------------------------------------------------------------------*/
 void Calculate(int n)
 {
-    for (int i = posY; i < (posY + 9); i++)
+    int i, j;
+
+    for (i = giPosY; i < (giPosY + 9); i++)
     {
-        for (int j = posX; j < (posX + 8); j++)
+        for (j = giPosX; j < (giPosX + 8); j++)
         {
             /*--------------------------------------------
             * 구구단의 맨 앞 숫자 채우기
             *--------------------------------------------*/
             if (j == 0 || j == 8 || j == 16)
             {
-                timesarr[i][j] = n + '0'; /* 숫자를 아스키코드로 변환 */
+                gsTimesArr[i][j] = n + '0'; /* 숫자를 아스키코드로 변환 */
             }
             /*--------------------------------------------
             * 구구단의 곱셈문자(X) 채우기
             *--------------------------------------------*/
             else if (j == 1 || j == 9 || j == 17)
             {
-                timesarr[i][j] = 'X';
+                gsTimesArr[i][j] = 'X';
             }
             /*--------------------------------------------
             * 구구단의 등호(=) 채우기
             *--------------------------------------------*/
             else if (j == 3 || j == 11 || j == 19)
             {
-                timesarr[i][j] = '=';
+                gsTimesArr[i][j] = '=';
             }
             /*--------------------------------------------
             * 구구단의 1~9까지 채우기
             *--------------------------------------------*/
             else if (j == 2 || j == 10 || j == 18)
             {
-                timesarr[i][j] = (i % 9) + 1 + '0'; /* 숫자를 아스키코드로 변환 */
+                gsTimesArr[i][j] = (i % 9) + 1 + '0'; /* 숫자를 아스키코드로 변환 */
             }
             /*--------------------------------------------
             * 구구단의 결과값 채우기
             *--------------------------------------------*/
             else if (j == 4 || j == 12 || j == 20)
             {
-                timesarr[i][j] = n * ((i % 9) + 1);
+                gsTimesArr[i][j] = n * ((i % 9) + 1);
             }
             else
             {
-                timesarr[i][j] = ' ';
+                gsTimesArr[i][j] = ' ';
             }
         }
     }
 
-    if (posX == 16)
+    if (giPosX == 16)
     {
-        posX = 0;
-        posY += 9;
+        giPosX = 0;
+        giPosY += 9;
     }
     else
     {
-        posX += 8;
+        giPosX += 8;
     }
 
 } /* End of Calculate */
 
 /*----------------------------------------------------------------------------------------------
  * Function     : PrintTimesTable
- * Description  : timesarr 배열을 출력.
+ * Description  : gsTimesArr 배열을 출력.
  *----------------------------------------------------------------------------------------------*/
 int PrintTimesTable()
 {
+    int i, j;
+
     printf("\n");
 
-    for (int i = 0; i < 100; i++)
+    for (i = 0; i < 100; i++)
     {
-        for (int j = 0; j < 24; j++)
+        for (j = 0; j < 24; j++)
         {
             if (j == 4 || j == 12 || j == 20)
             {
-                if (timesarr[i][j] != 0)
+                if (gsTimesArr[i][j] != 0)
                 {
-                    printf("%3d", timesarr[i][j]);
+                    printf("%3d", gsTimesArr[i][j]);
                 }
                 else
                 {
-                    printf("%3c", timesarr[i][j]);
+                    printf("%3c", gsTimesArr[i][j]);
                 }
             }
             else
             {
-                printf("%3c", timesarr[i][j]);
+                printf("%3c", gsTimesArr[i][j]);
             }
 
             if (j == 23 && (i + 1) % 9 == 0)
             {
-                if (timesarr[i + 1][0] == 0x00 && timesarr[i + 2][0] == 0x00)
+                if (gsTimesArr[i + 1][0] == 0x00 && gsTimesArr[i + 2][0] == 0x00)
                 {
                     return 0;
                 }
