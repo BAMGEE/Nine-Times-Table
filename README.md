@@ -1,5 +1,5 @@
 # STUDY 02 - Nine-Times-Table
-> Generate multiplication tables using commas and tiles<br>
+> Generate multiplication tables using commas and tildes<br>
 > 콤마(,)와 물결표(~)를 사용해 구구단을 출력하는 프로그램
 
 <p align="center" dir="auto">
